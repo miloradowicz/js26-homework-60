@@ -26,9 +26,8 @@ const MessageForm: FC<MessageFormProps> = ({ onSubmit }) => {
 
     if (validateData(data)) {
       onSubmit(data);
+      setData({ message: '' });
     }
-
-    setData({ message: '' });
   };
 
   return (
