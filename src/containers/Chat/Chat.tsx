@@ -3,7 +3,7 @@ import { Message, MessageFormData, UsernameFormData } from '../../types.d';
 import { getMessages, postMessage } from '../../lib/chat-api';
 import { useEffect, useState } from 'react';
 import { Button, Card, Container } from 'react-bootstrap';
-import UserSwitchModal from '../../components/UsernameModal/UsernameModal';
+import UsernameModal from '../../components/UsernameModal/UsernameModal';
 import MessageForm from '../../components/MessageForm/MessageForm';
 import MessageList from '../../components/MessageList/MessageList';
 
@@ -12,7 +12,7 @@ const defaults = {
   username: 'miloradowicz',
 };
 
-let lastUpdated: DateTime = DateTime.min();
+let lastUpdated: DateTime | undefined;
 
 const Chat = () => {
   const [username, setUsername] = useState('miloradowicz');
@@ -25,11 +25,9 @@ const Chat = () => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {});
-
   const pollMessages = async () => {
     try {
-      const newMessages = await getMessages(lastUpdated);
+      const newMessages = await getMessages(lastUpdated?.plus(1));
 
       if (newMessages.length !== 0) {
         lastUpdated = newMessages[newMessages.length - 1].datetime;
@@ -69,7 +67,7 @@ const Chat = () => {
           <MessageForm onSubmit={sendMessage} />
         </Card.Footer>
       </Card>
-      <UserSwitchModal show={modalVisible} onClose={() => setModalVisible(false)} onSubmit={updateUsername} defaultUsername={defaults.username} />
+      <UsernameModal show={modalVisible} onClose={() => setModalVisible(false)} onSubmit={updateUsername} defaultUsername={defaults.username} />
     </Container>
   );
 };

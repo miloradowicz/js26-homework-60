@@ -18,7 +18,7 @@ const validateData = (data: UsernameFormData) => {
   return true;
 };
 
-const UserSwitchModal: FC<UsernameModalProps> = ({ show, onClose, onSubmit, defaultUsername }) => {
+const UsernameModal: FC<UsernameModalProps> = ({ show, onClose, onSubmit, defaultUsername }) => {
   const [data, setData] = useState({ username: defaultUsername });
 
   const updateData: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -60,4 +60,4 @@ const UserSwitchModal: FC<UsernameModalProps> = ({ show, onClose, onSubmit, defa
   );
 };
 
-export default UserSwitchModal;
+export default UsernameModal;
