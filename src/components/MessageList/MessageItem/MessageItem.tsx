@@ -1,18 +1,17 @@
 import { FC, memo } from 'react';
-import { Message } from '../../../types.d';
+import { Alignment, MessageView } from '../../../types.d';
 
 interface MessageItemProps {
-  message: Message;
-  alignment?: 'left' | 'right';
+  message: MessageView;
 }
 
 const MessageItem: FC<MessageItemProps> = memo(
-  ({ message: { message, author, datetime }, alignment }) => {
+  ({ message: { message, author, datetime, alignment } }) => {
     console.log(message);
 
     return (
       <div>
-        <div className={`d-flex mb-1 justify-content-between ${alignment === 'right' ? 'flex-row-reverse' : ''}`}>
+        <div className={`d-flex mb-1 justify-content-between ${alignment === Alignment.Right ? 'flex-row-reverse' : ''}`}>
           <div>{author}</div>
           <div className='text-muted'>{datetime.toFormat('ff')}</div>
         </div>

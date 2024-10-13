@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { Message, MessageFormData, UsernameFormData } from '../../types.d';
+import { Alignment, MessageFormData, MessageView, UsernameFormData } from '../../types.d';
 import { getMessages, postMessage } from '../../lib/chat-api';
 import { useEffect, useState } from 'react';
 import { Button, Card, Container } from 'react-bootstrap';
@@ -16,14 +16,14 @@ let lastUpdated: DateTime | undefined;
 
 const Chat = () => {
   const [username, setUsername] = useState('miloradowicz');
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<MessageView[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(pollMessages, defaults.updateInterval);
 
     return () => clearInterval(interval);
-  }, []);
+  });
 
   const pollMessages = async () => {
     try {
@@ -31,9 +31,8 @@ const Chat = () => {
 
       if (newMessages.length !== 0) {
         lastUpdated = newMessages[newMessages.length - 1].datetime;
+        setMessages((messages) => [...messages, ...newMessages.map((x) => ({ ...x, alignment: x.author === username ? Alignment.Right : Alignment.Left }))]);
       }
-
-      setMessages((messages) => [...messages, ...newMessages]);
     } catch (err) {
       console.error(err);
     }

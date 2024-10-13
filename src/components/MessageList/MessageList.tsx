@@ -1,9 +1,9 @@
-import { Message } from '../../types.d';
+import { MessageView } from '../../types.d';
 import { FC, useEffect, useRef } from 'react';
 import MessageItem from './MessageItem/MessageItem';
 
 interface MessageListProps {
-  messages: Message[];
+  messages: MessageView[];
 }
 
 const MessageList: FC<MessageListProps> = ({ messages }) => {

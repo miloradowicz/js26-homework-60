@@ -1,11 +1,8 @@
 import { DateTime } from 'luxon';
 
-export interface MessageFormData {
-  get message(): string;
-}
-
-export interface UsernameFormData {
-  get username(): string;
+export enum Alignment {
+  Left = 'left',
+  Right = 'right',
 }
 
 export interface Message {
@@ -13,4 +10,16 @@ export interface Message {
   get message(): string;
   get author(): string;
   get datetime(): DateTime;
+}
+
+export interface MessageFormData {
+  get message(): string;
+}
+
+export interface MessageView extends Message {
+  get alignment(): Alignment;
+}
+
+export interface UsernameFormData {
+  get username(): string;
 }
