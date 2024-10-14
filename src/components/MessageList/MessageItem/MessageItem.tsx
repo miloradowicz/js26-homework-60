@@ -1,27 +1,28 @@
 import { FC, memo } from 'react';
-import { Alignment, MessageView } from '../../../types.d';
+import { Message } from '../../../types.d';
 
 interface MessageItemProps {
-  message: MessageView;
+  message: Message;
+  self: string;
 }
 
 const MessageItem: FC<MessageItemProps> = memo(
-  ({ message: { message, author, datetime, alignment } }) => {
+  ({ message: { message, author, datetime }, self }) => {
     console.log(message);
 
     return (
       <div>
-        <div className={`d-flex mb-1 justify-content-between ${alignment === Alignment.Right ? 'flex-row-reverse' : ''}`}>
+        <div className={`d-flex mb-1 justify-content-between ${author === self ? 'flex-row-reverse' : ''}`}>
           <div>{author}</div>
           <div className='text-muted'>{datetime.toFormat('ff')}</div>
         </div>
-        <div className='d-flex ms-3 mb-3 justify-content-start'>
-          <p className='small p-2 rounded-3 text-start bg-body-tertiary'>{message}</p>
+        <div className={`d-flex ms-3 mb-3 ${author === self ? 'justify-content-end' : 'justify-content-start'}`}>
+          <p className={`small p-2 rounded-3 text-start ${author === self ? 'bg-warning' : 'bg-secondary-subtle'}`}>{message}</p>
         </div>
       </div>
     );
   },
-  ({ message: prev }, { message: next }) => prev._id === next._id
+  (prev, next) => prev.message._id === next.message._id && prev.self === next.self
 );
 
 export default MessageItem;

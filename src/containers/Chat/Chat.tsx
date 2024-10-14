@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { Alignment, MessageFormData, MessageView, UsernameFormData } from '../../types.d';
+import { MessageFormData, Message, UsernameFormData } from '../../types.d';
 import { getMessages, postMessage } from '../../lib/chat-api';
 import { useEffect, useState } from 'react';
 import { Button, Card, Container } from 'react-bootstrap';
@@ -15,8 +15,8 @@ const defaults = {
 let lastUpdated: DateTime | undefined;
 
 const Chat = () => {
-  const [username, setUsername] = useState('miloradowicz');
-  const [messages, setMessages] = useState<MessageView[]>([]);
+  const [username, setUsername] = useState(defaults.username);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const Chat = () => {
 
       if (newMessages.length !== 0) {
         lastUpdated = newMessages[newMessages.length - 1].datetime;
-        setMessages((messages) => [...messages, ...newMessages.map((x) => ({ ...x, alignment: x.author === username ? Alignment.Right : Alignment.Left }))]);
+        setMessages((messages) => [...messages, ...newMessages]);
       }
     } catch (err) {
       console.error(err);
@@ -60,13 +60,13 @@ const Chat = () => {
           </Button>
         </Card.Header>
         <Card.Body className='overflow-auto' style={{ height: '80dvh' }}>
-          <MessageList messages={messages} />
+          <MessageList messages={messages} self={username} />
         </Card.Body>
         <Card.Footer>
           <MessageForm onSubmit={sendMessage} />
         </Card.Footer>
       </Card>
-      <UsernameModal show={modalVisible} onClose={() => setModalVisible(false)} onSubmit={updateUsername} defaultUsername={defaults.username} />
+      <UsernameModal show={modalVisible} onClose={() => setModalVisible(false)} onSubmit={updateUsername} initial={username} />
     </Container>
   );
 };

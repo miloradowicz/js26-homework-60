@@ -1,5 +1,5 @@
 import { UsernameFormData } from '../../types.d';
-import { ChangeEventHandler, FC, FormEventHandler, useState } from 'react';
+import { ChangeEventHandler, FC, FormEventHandler, useEffect, useState } from 'react';
 import { Button, Form, InputGroup, Modal } from 'react-bootstrap';
 import InputGroupText from 'react-bootstrap/esm/InputGroupText';
 
@@ -7,7 +7,7 @@ interface UsernameModalProps {
   show: boolean;
   onClose: () => void;
   onSubmit: (_: UsernameFormData) => void;
-  defaultUsername: string;
+  initial: string;
 }
 
 const validateData = (data: UsernameFormData) => {
@@ -18,8 +18,10 @@ const validateData = (data: UsernameFormData) => {
   return true;
 };
 
-const UsernameModal: FC<UsernameModalProps> = ({ show, onClose, onSubmit, defaultUsername }) => {
-  const [data, setData] = useState({ username: defaultUsername });
+const UsernameModal: FC<UsernameModalProps> = ({ show, onClose, onSubmit, initial }) => {
+  const [data, setData] = useState({ username: initial });
+
+  useEffect(() => setData({ username: initial }), [show, initial]);
 
   const updateData: ChangeEventHandler<HTMLInputElement> = (e) => {
     setData((data) => ({ ...data, [e.target.name]: e.target.value }));
